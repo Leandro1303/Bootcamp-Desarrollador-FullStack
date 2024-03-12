@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subir archivo</title>
+</head>
+<body>
+  <input type="file" id="fileInput" />
+  <button onclick="handleFile()">Subir a Firebase</button>
+
+  <script>
+    function handleFile() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const content = e.target.result;
+          processData(content);
+        };
+        reader.readAsText(file);
+      } else {
+        alert('Por favor, selecciona un archivo.');
+      }
+    }
+
+    function processData(content) {
+      const rows = content.split('\n');
+      const arrayData = [];
+
+      for (let i = 0; i < rows.length; i++) {
+        const values = rows[i].split(';');
+        const data = {
+          CuentaPorAcreditar: parseInt(values[0].trim()),
+          CuentaPorCobrar: parseInt(values[1].trim()),
+          monto: parseFloat(values[2].trim()),
+          cedula: parseInt(values[3].trim())
+        };
+
+        arrayData.push(data);
+      }
+
+      // Presentar en consola como JSON
+      console.log(JSON.stringify(arrayData, null, 2));
+    }
+  </script>
+</body>
+</html>
